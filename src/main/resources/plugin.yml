@@ -1,8 +1,0 @@
-name: Squirrelwallets
-version: @version@
-main: io.gitlab.twosquirrels.squirrelwallets.Squirrelwallets
-api-version: 1.16
-prefix: SWallets
-authors: [ TwoSquirrels ]
-description: マインクラフトサーバーにお金の概念を追加するプラグイン SQLiteを使用しデータを管理
-website: https://gitlab.com/mcsquirrel/plugins/squirrelwallets
