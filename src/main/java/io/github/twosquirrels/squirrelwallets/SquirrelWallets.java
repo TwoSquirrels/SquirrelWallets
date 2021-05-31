@@ -2,7 +2,7 @@ package io.github.twosquirrels.squirrelwallets;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Squirrelwallets extends JavaPlugin {
+public final class SquirrelWallets extends JavaPlugin {
 
     @Override
     public void onEnable() {

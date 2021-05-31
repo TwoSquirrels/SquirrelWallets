@@ -1,6 +1,6 @@
-name: Squirrelwallets
+name: SquirrelWallets
 version: @version@
-main: io.github.twosquirrels.squirrelwallets.Squirrelwallets
+main: io.github.twosquirrels.squirrelwallets.SquirrelWallets
 api-version: 1.16
 prefix: SWallets
 authors: [ TwoSquirrels ]
