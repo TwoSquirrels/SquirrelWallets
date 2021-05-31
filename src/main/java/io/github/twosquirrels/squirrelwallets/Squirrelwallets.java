@@ -1,4 +1,4 @@
-package io.gitlab.twosquirrels.squirrelwallets;
+package io.github.twosquirrels.squirrelwallets;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

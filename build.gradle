@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group = 'io.gitlab.twosquirrels'
+group = 'io.github.twosquirrels'
 version = '1.0-SNAPSHOT'
 
 sourceCompatibility = '1.8'
