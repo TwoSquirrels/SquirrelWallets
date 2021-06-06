@@ -1,0 +1,2 @@
+io/github/twosquirrels/squirrelwallets/SquirrelWallets.java
+ io.github.twosquirrels.squirrelwallets.SquirrelWallets
