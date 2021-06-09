@@ -1,5 +1,6 @@
 import org.yaml.snakeyaml.Yaml
 import org.json.JSONObject
+import com.github.javaparser.JavaParser
 
 buildscript {
     repositories{
@@ -8,6 +9,7 @@ buildscript {
     dependencies {
         classpath("org.yaml:snakeyaml:1.17")
         classpath("org.json:json:20210307")
+        classpath("com.github.javaparser:javaparser-core:3.3.0")
     }
 }
 
@@ -17,10 +19,17 @@ plugins {
     id 'groovy'
 }
 
+// Import plugin.yml with SnakeYaml
 Yaml yaml = new Yaml()
 JSONObject pluginInfo = new JSONObject((Map<String, Object>) yaml.load(
         new FileInputStream(new File("$projectDir/src/main/resources/plugin.yml"))
 ))
+
+// Replace javadoc with JavaParser
+new File("$projectDir/src/main/java").eachFileRecurse { file ->
+    if (!file.isFile()) return
+    println file.getName()
+}
 
 repositories {
     mavenLocal()
@@ -42,8 +51,8 @@ dependencies {
 }
 
 group = 'io.github.twosquirrels'
-version = '1.0-SNAPSHOT'
-description = 'SquirrelWallets'
+version = pluginInfo.getString("version")
+description = pluginInfo.getString("name")
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
