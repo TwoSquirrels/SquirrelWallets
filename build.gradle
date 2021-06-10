@@ -29,7 +29,7 @@ JSONObject pluginInfo = new JSONObject((Map<String, Object>) yaml.load(
 new File("$projectDir/src/main/java").eachFileRecurse { file ->
     if (!file.isFile()) return
     println file.getName()
-    // TODO: JavaParserを用いてJavaファイル内のJavaDocコメントの`@version`の所を書き換える
+    // TODO: JavaParserを用いてJavaファイル内のJavaDocコメントの`@version`とメッセージを取得しファイルに保存
 }
 
 repositories {
