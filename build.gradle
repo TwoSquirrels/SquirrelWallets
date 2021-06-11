@@ -1,6 +1,10 @@
-import org.yaml.snakeyaml.Yaml
-import org.json.JSONObject
 import com.github.javaparser.JavaParser
+import com.github.javaparser.ast.body.VariableDeclarator
+import com.github.javaparser.ast.comments.JavadocComment
+import com.github.javaparser.ast.visitor.VoidVisitor
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter
+import org.json.JSONObject
+import org.yaml.snakeyaml.Yaml
 
 buildscript {
     repositories{
@@ -28,8 +32,23 @@ JSONObject pluginInfo = new JSONObject((Map<String, Object>) yaml.load(
 // Replace javadoc with JavaParser
 new File("$projectDir/src/main/java").eachFileRecurse { file ->
     if (!file.isFile()) return
-    println file.getName()
-    // TODO: JavaParserを用いてJavaファイル内のJavaDocコメントの`@version`とメッセージを取得しファイルに保存
+    println ">>> " + file.getName()
+    def unit = JavaParser.parse(file)
+    println unit
+    unit.accept((VoidVisitor) new VoidVisitorAdapter<Object>() {
+        @Override
+        void visit(VariableDeclarator n, Object arg) {
+            // TODO: Javadocコメントをフィルターしバージョンを書き換える
+            if (n.getComment() != null && n.getComment() instanceof JavadocComment) {
+                println n
+                /*String title = String.format("%s (%s)", n.getName(), path)
+                println title
+                println Strings.repeat("=", title.length())
+                println n.getComment()*/
+            }
+            super.visit(n, arg)
+        }
+    }, null)
 }
 
 repositories {
