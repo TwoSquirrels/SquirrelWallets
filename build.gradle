@@ -1,5 +1,7 @@
 import com.github.javaparser.JavaParser
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.comments.Comment
+import com.github.javaparser.ast.comments.JavadocComment
 import org.json.JSONObject
 import org.yaml.snakeyaml.Yaml
 
@@ -32,7 +34,12 @@ new File("$projectDir/src/main/java").eachFileRecurse { file ->
     println ">>> " + file.getName()
     def unit = JavaParser.parse(file)
     println unit
-    unit.getChildNodes().stream().forEach(node -> println node.getMetaModel().getTypeName())
+    unit.getChildNodesByType(ClassOrInterfaceDeclaration.class).stream()
+            .map(classOrInterface ->
+                    classOrInterface.getComment().orElse(classOrInterface.setComment(new JavadocComment()).getComment().get())
+            )
+            .forEach(System.out::println)
+    // TODO: Replace the code in the source file with unit.
 }
 
 repositories {
