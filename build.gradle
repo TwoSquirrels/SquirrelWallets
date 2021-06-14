@@ -36,7 +36,7 @@ new File("$projectDir/src/main/java").eachFileRecurse { file ->
     println unit
     unit.getChildNodesByType(ClassOrInterfaceDeclaration.class).stream()
             .map(classOrInterface ->
-                    classOrInterface.getComment().orElse(classOrInterface.setComment(new JavadocComment()).getComment().get())
+                    classOrInterface.getComment().orElse(new JavadocComment(""))
             )
             .forEach(System.out::println)
     // TODO: Replace the code in the source file with unit.
