@@ -11,12 +11,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class SquirrelWallets extends JavaPlugin {
 
     /**
-     * TestClass
+     * This is TestClass
      * @since 1.0-SNAPSHOT
      * @author TwoSquirrels
      */
     private static class TestClass {
         private static class TestClass2 {
+            // This is TestClass3
+            private static class TestClass3 {
+
+            }
+        }
+        /*
+        This is TestClass4
+        Descriptions
+        */
+        private static class TestClass4 {
 
         }
     }

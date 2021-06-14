@@ -35,10 +35,22 @@ new File("$projectDir/src/main/java").eachFileRecurse { file ->
     def unit = JavaParser.parse(file)
     println unit
     unit.getChildNodesByType(ClassOrInterfaceDeclaration.class).stream()
-            .map(classOrInterface ->
-                    classOrInterface.getComment().orElse(new JavadocComment(""))
-            )
-            .forEach(System.out::println)
+            .map(classOrInterface -> {
+                def comment = classOrInterface.getComment().orElse(null)
+                if (comment instanceof JavadocComment) return comment
+                else if (Objects.nonNull(comment)) return classOrInterface.setComment(new JavadocComment(comment.getContent())).getComment().get()
+                else return classOrInterface.setComment(new JavadocComment("")).getComment().get()
+            })
+            .map(comment -> (comment as JavadocComment).parse())
+            .forEach(javadoc -> println javadoc.toString())
+            /*
+Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='SquirrelWallets'}]}, blockTags=[JavadocBlockTag{type=VERSION, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=SINCE, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=AUTHOR, content='JavadocDescription{elements=[JavadocSnippet{text='TwoSquirrels'}]}', name=Optional.empty}]}
+Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='This is TestClass'}]}, blockTags=[JavadocBlockTag{type=SINCE, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=AUTHOR, content='JavadocDescription{elements=[JavadocSnippet{text='TwoSquirrels'}]}', name=Optional.empty}]}
+Javadoc{description=JavadocDescription{elements=[]}, blockTags=[]}
+Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='This is TestClass3'}]}, blockTags=[]}
+Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='        This is TestClass4
+        Descriptions'}]}, blockTags=[]}
+             */
     // TODO: Replace the code in the source file with unit.
 }
 
