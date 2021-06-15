@@ -51,6 +51,7 @@ Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='This is Te
 Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='        This is TestClass4
         Descriptions'}]}, blockTags=[]}
              */
+    println "説明: ${description}"
     // TODO: Replace the code in the source file with unit.
 }
 
