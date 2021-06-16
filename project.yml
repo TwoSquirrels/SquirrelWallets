@@ -1,0 +1,24 @@
+name: SquirrelWallets
+version: '1.0-SNAPSHOT'
+main: io.github.twosquirrels.squirrelwallets.SquirrelWallets
+api-version: '1.16'
+prefix: SWallets
+developers:
+  - id: TwoSquirrels
+    name: りすりす/TwoSquirrels
+    email: RisuRisu.TwoSquirrels@gmail.com
+    url: https://github.com/TwoSquirrels
+    organization: SengokuCraft
+    organizationUrl: https://github.com/SengokuCraft
+    timezone: Asia/Tokyo
+    properties:
+      picUrl: https://github.com/TwoSquirrels.png
+      twitter: TwoSquirrels
+      discord: りすりす/TwoSquirrels#9940
+creation-date: May 26, 2021
+copyright: (c) TwoSquirrels 2021
+licenses:
+  - name: Apache License, Version 2.0
+  - url: https://www.apache.org/licenses/LICENSE-2.0
+description: マインクラフトサーバーにお金の概念を追加するプラグイン SQLiteを使用しデータを管理
+website: https://github.com/TwoSquirrels/SquirrelWallets
