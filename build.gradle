@@ -22,11 +22,13 @@ plugins {
     id 'groovy'
 }
 
-// Import plugin.yml with SnakeYaml
+// Import project.yml with SnakeYaml
 Yaml yaml = new Yaml()
-JSONObject pluginInfo = new JSONObject((Map<String, Object>) yaml.load(
-        new FileInputStream(new File("$projectDir/src/main/resources/plugin.yml"))
+JSONObject projectInfo = new JSONObject((Map<String, Object>) yaml.load(
+        new FileInputStream(new File("$projectDir/project.yml"))
 ))
+
+// println yaml.dump(projectInfo)
 
 // Replace javadoc with JavaParser
 new File("$projectDir/src/main/java").eachFileRecurse { file ->
@@ -51,7 +53,6 @@ Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='This is Te
 Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='        This is TestClass4
         Descriptions'}]}, blockTags=[]}
              */
-    println "説明: ${description}"
     // TODO: Replace the code in the source file with unit.
 }
 
@@ -72,9 +73,9 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
 }
 
-group = 'io.github.twosquirrels'
-version = pluginInfo.getString("version")
-description = pluginInfo.getString("name")
+group = projectInfo.getString("group")
+version = projectInfo.getString("version")
+description = projectInfo.getString("description")
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
