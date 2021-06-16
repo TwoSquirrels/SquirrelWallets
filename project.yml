@@ -20,6 +20,6 @@ creation-date: May 26, 2021
 copyright: (c) TwoSquirrels 2021
 licenses:
   - name: Apache License, Version 2.0
-  - url: https://www.apache.org/licenses/LICENSE-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
 description: マインクラフトサーバーにお金の概念を追加するプラグイン SQLiteを使用しデータを管理
 website: https://github.com/TwoSquirrels/SquirrelWallets
