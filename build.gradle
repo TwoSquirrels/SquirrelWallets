@@ -9,6 +9,12 @@ buildscript {
     }
 }
 
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'groovy'
+}
+
 import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.comments.Comment
@@ -16,12 +22,6 @@ import com.github.javaparser.ast.comments.JavadocComment
 import com.github.javaparser.javadoc.Javadoc
 import org.json.JSONObject
 import org.yaml.snakeyaml.Yaml
-
-plugins {
-    id 'java'
-    id 'maven-publish'
-    id 'groovy'
-}
 
 // Import project.yml with SnakeYaml
 Yaml yaml = new Yaml()
