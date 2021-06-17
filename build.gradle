@@ -6,7 +6,7 @@ import org.json.JSONObject
 import org.yaml.snakeyaml.Yaml
 
 buildscript {
-    repositories{
+    repositories {
         mavenCentral()
     }
     dependencies {
@@ -40,26 +40,33 @@ new File("$projectDir/src/main/java").eachFileRecurse { file ->
             .map(classOrInterface -> {
                 def comment = classOrInterface.getComment().orElse(null)
                 if (comment instanceof JavadocComment) return comment
-                else if (Objects.nonNull(comment)) return classOrInterface.setComment(new JavadocComment(comment.getContent())).getComment().get()
-                else return classOrInterface.setComment(new JavadocComment("")).getComment().get()
+                else if (Objects.nonNull(comment))
+                    return classOrInterface.setComment(
+                            new JavadocComment(comment.getContent())
+                    ).getComment().get()
+                else return classOrInterface.setComment(new JavadocComment(""))
+                            .getComment().get()
             })
             .map(comment -> (comment as JavadocComment).parse())
             .forEach(javadoc -> println javadoc.toString())
-            /*
+    /*
 Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='SquirrelWallets'}]}, blockTags=[JavadocBlockTag{type=VERSION, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=SINCE, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=AUTHOR, content='JavadocDescription{elements=[JavadocSnippet{text='TwoSquirrels'}]}', name=Optional.empty}]}
 Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='This is TestClass'}]}, blockTags=[JavadocBlockTag{type=SINCE, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=AUTHOR, content='JavadocDescription{elements=[JavadocSnippet{text='TwoSquirrels'}]}', name=Optional.empty}]}
 Javadoc{description=JavadocDescription{elements=[]}, blockTags=[]}
 Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='This is TestClass3'}]}, blockTags=[]}
 Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='        This is TestClass4
         Descriptions'}]}, blockTags=[]}
-             */
-    // TODO: Replace the code in the source file with unit.
+    */
+    // TODO: Replace the javadoc comments in the source file with unit.
+    // TODO: Embed the license notation at the top of the file.
 }
 
 repositories {
     mavenLocal()
     maven {
-        url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/')
+        url = uri(
+                'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        )
     }
     maven {
         url = uri('https://oss.sonatype.org/content/groups/public/')
