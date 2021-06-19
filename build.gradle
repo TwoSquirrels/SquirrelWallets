@@ -5,7 +5,7 @@ buildscript {
     dependencies {
         classpath("org.yaml:snakeyaml:1.17")
         classpath("org.json:json:20210307")
-        classpath("com.github.javaparser:javaparser-core:3.22.1")
+        classpath("com.github.javaparser:javaparser-core:3.3.0")
     }
 }
 
@@ -15,7 +15,7 @@ plugins {
     id 'groovy'
 }
 
-import com.github.javaparser.StaticJavaParser
+import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.comments.Comment
@@ -36,9 +36,9 @@ JSONObject projectInfo = new JSONObject((Map<String, Object>) yaml.load(
 new File("$projectDir/src/main/java").eachFileRecurse { file ->
     if (!file.isFile()) return
     println ">>> " + file.getName()
-    CompilationUnit unit = StaticJavaParser.parse(file)
+    CompilationUnit unit = JavaParser.parse(file)
     println unit
-    unit.findAll(ClassOrInterfaceDeclaration.class).stream()
+    unit.getChildNodesByType(ClassOrInterfaceDeclaration.class).stream()
             .map((ClassOrInterfaceDeclaration classOrInterface) -> {
                 def comment = classOrInterface.getComment().orElse(null)
                 if (comment instanceof JavadocComment) return comment
