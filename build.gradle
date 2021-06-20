@@ -1,3 +1,5 @@
+// Set gradle options
+
 buildscript {
     repositories {
         mavenCentral()
@@ -21,18 +23,53 @@ import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.comments.Comment
 import com.github.javaparser.ast.comments.JavadocComment
 import com.github.javaparser.javadoc.Javadoc
+import com.github.javaparser.javadoc.JavadocBlockTag
 import org.json.JSONObject
 import org.yaml.snakeyaml.Yaml
 
 // Import project.yml with SnakeYaml
+
 Yaml yaml = new Yaml()
 JSONObject projectInfo = new JSONObject((Map<String, Object>) yaml.load(
         new FileInputStream(new File("$projectDir/project.yml"))
 ))
 
-// println yaml.dump(projectInfo)
+// Set compile options
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri(
+                'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        )
+    }
+    maven {
+        url = uri('https://oss.sonatype.org/content/groups/public/')
+    }
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+}
+
+group = projectInfo.getString("group")
+version = projectInfo.getString("version")
+description = projectInfo.getString("description")
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
 
 // Replace javadoc with JavaParser
+
 new File("$projectDir/src/main/java").eachFileRecurse { file ->
     if (!file.isFile()) return
     println ">>> " + file.getName()
@@ -71,36 +108,4 @@ Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='        Th
     println unit
     // TODO: Replace the javadoc comments in the source file with unit.
     // TODO: Embed the license notation at the top of the file.
-}
-
-repositories {
-    mavenLocal()
-    maven {
-        url = uri(
-                'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-        )
-    }
-    maven {
-        url = uri('https://oss.sonatype.org/content/groups/public/')
-    }
-    maven {
-        url = uri('https://repo.maven.apache.org/maven2/')
-    }
-}
-
-dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
-}
-
-group = projectInfo.getString("group")
-version = projectInfo.getString("version")
-description = projectInfo.getString("description")
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
 }
