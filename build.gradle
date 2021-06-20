@@ -19,8 +19,6 @@ plugins {
 
 import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
-import com.github.javaparser.ast.CompilationUnit
-import com.github.javaparser.ast.comments.Comment
 import com.github.javaparser.ast.comments.JavadocComment
 import com.github.javaparser.javadoc.Javadoc
 import com.github.javaparser.javadoc.JavadocBlockTag
@@ -70,13 +68,16 @@ tasks.withType(JavaCompile) {
 
 // Replace javadoc with JavaParser
 
+// Scan all files
 new File("$projectDir/src/main/java").eachFileRecurse { file ->
     if (!file.isFile()) return
     println ">>> " + file.getName()
-    CompilationUnit unit = JavaParser.parse(file)
+    def unit = JavaParser.parse(file)
     println unit
+    // Scan all Classes
     unit.getChildNodesByType(ClassOrInterfaceDeclaration.class).stream()
-            .map((ClassOrInterfaceDeclaration classOrInterface) -> {
+            .map(classOrInterface -> {
+                // Get a JavadocComment (or create one if you don't have one)
                 def comment = classOrInterface.getComment().orElse(null)
                 if (comment instanceof JavadocComment) return comment
                 else if (Objects.nonNull(comment))
@@ -86,13 +87,17 @@ new File("$projectDir/src/main/java").eachFileRecurse { file ->
                 else return classOrInterface.setComment(new JavadocComment(""))
                             .getComment().get()
             })
-            .map((Comment comment) -> comment as JavadocComment)
+            .map(comment -> comment as JavadocComment)
             .forEach(javadocComment -> {
+                // Tailor Javadoc
                 Javadoc javadoc = javadocComment.parse()
                 println "- before -----------------------"
                 println javadoc.toText()
                 println "--------------------------------"
-
+                // Set version block
+                javadoc.getBlockTags().removeIf(blockTag ->
+                        blockTag.getType() == JavadocBlockTag.Type.VERSION)
+                javadoc.addBlockTag("version", version)
                 println "- after ------------------------"
                 println javadoc.toText()
                 println "--------------------------------"
