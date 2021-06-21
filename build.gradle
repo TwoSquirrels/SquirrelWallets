@@ -76,7 +76,7 @@ new File("$projectDir/src/main/java").eachFileRecurse { file ->
     println unit
     // Scan all Classes
     unit.getChildNodesByType(ClassOrInterfaceDeclaration.class).stream()
-            .map(classOrInterface -> {
+            .map { classOrInterface ->
                 // Get a JavadocComment (or create one if you don't have one)
                 def comment = classOrInterface.getComment().orElse(null)
                 if (comment instanceof JavadocComment) return comment
@@ -86,9 +86,9 @@ new File("$projectDir/src/main/java").eachFileRecurse { file ->
                     ).getComment().get()
                 else return classOrInterface.setComment(new JavadocComment(""))
                             .getComment().get()
-            })
-            .map(comment -> comment as JavadocComment)
-            .forEach(javadocComment -> {
+            }
+            .map { comment -> comment as JavadocComment }
+            .forEach { javadocComment ->
                 // Tailor Javadoc
                 Javadoc javadoc = javadocComment.parse()
                 println "- before -----------------------"
@@ -101,7 +101,7 @@ new File("$projectDir/src/main/java").eachFileRecurse { file ->
                 println "- after ------------------------"
                 println javadoc.toText()
                 println "--------------------------------"
-            })
+            }
     /*
 Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='SquirrelWallets'}]}, blockTags=[JavadocBlockTag{type=VERSION, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=SINCE, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=AUTHOR, content='JavadocDescription{elements=[JavadocSnippet{text='TwoSquirrels'}]}', name=Optional.empty}]}
 Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='This is TestClass'}]}, blockTags=[JavadocBlockTag{type=SINCE, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=AUTHOR, content='JavadocDescription{elements=[JavadocSnippet{text='TwoSquirrels'}]}', name=Optional.empty}]}
