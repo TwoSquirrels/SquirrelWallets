@@ -7,7 +7,6 @@ buildscript {
     dependencies {
         classpath("org.yaml:snakeyaml:1.17")
         classpath("org.json:json:20210307")
-        classpath("com.github.javaparser:javaparser-core:3.3.0")
     }
 }
 
@@ -17,11 +16,6 @@ plugins {
     id 'groovy'
 }
 
-import com.github.javaparser.JavaParser
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
-import com.github.javaparser.ast.comments.JavadocComment
-import com.github.javaparser.javadoc.Javadoc
-import com.github.javaparser.javadoc.JavadocBlockTag
 import org.json.JSONObject
 import org.yaml.snakeyaml.Yaml
 
@@ -66,52 +60,13 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-// Replace javadoc with JavaParser
+// TODO: Embed the license notation at the top of the file
 
 // Scan all files
 new File("$projectDir/src/main/java").eachFileRecurse { file ->
     if (!file.isFile()) return
     println ">>> " + file.getName()
-    def unit = JavaParser.parse(file)
-    println unit
-    // Scan all Classes
-    unit.getChildNodesByType(ClassOrInterfaceDeclaration.class).stream()
-            .map { classOrInterface ->
-                // Get a JavadocComment (or create one if you don't have one)
-                def comment = classOrInterface.getComment().orElse(null)
-                if (comment instanceof JavadocComment) return comment
-                else if (Objects.nonNull(comment))
-                    return classOrInterface.setComment(
-                            new JavadocComment(comment.getContent())
-                    ).getComment().get()
-                else return classOrInterface.setComment(new JavadocComment(""))
-                            .getComment().get()
-            }
-            .map { comment -> comment as JavadocComment }
-            .forEach { javadocComment ->
-                // Tailor Javadoc
-                Javadoc javadoc = javadocComment.parse()
-                println "- before -----------------------"
-                println javadoc.toText()
-                println "--------------------------------"
-                // Set version block
-                javadoc.getBlockTags().removeIf(blockTag ->
-                        blockTag.getType() == JavadocBlockTag.Type.VERSION)
-                javadoc.addBlockTag("version", version)
-                println "- after ------------------------"
-                println javadoc.toText()
-                println "--------------------------------"
-            }
-    /*
-Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='SquirrelWallets'}]}, blockTags=[JavadocBlockTag{type=VERSION, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=SINCE, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=AUTHOR, content='JavadocDescription{elements=[JavadocSnippet{text='TwoSquirrels'}]}', name=Optional.empty}]}
-Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='This is TestClass'}]}, blockTags=[JavadocBlockTag{type=SINCE, content='JavadocDescription{elements=[JavadocSnippet{text='1.0-SNAPSHOT'}]}', name=Optional.empty}, JavadocBlockTag{type=AUTHOR, content='JavadocDescription{elements=[JavadocSnippet{text='TwoSquirrels'}]}', name=Optional.empty}]}
-Javadoc{description=JavadocDescription{elements=[]}, blockTags=[]}
-Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='This is TestClass3'}]}, blockTags=[]}
-Javadoc{description=JavadocDescription{elements=[JavadocSnippet{text='        This is TestClass4
-        Descriptions'}]}, blockTags=[]}
-    */
-    println unit
-    // TODO: Add to since block if there is none for all javadoc comments
-    // TODO: Embed the license notation at the top of the file
+
 }
+
 // TODO: Replace plugin.yml
