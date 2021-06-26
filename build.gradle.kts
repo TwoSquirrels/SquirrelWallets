@@ -11,9 +11,7 @@ buildscript {
 }
 
 plugins {
-    id "java"
-    id "maven-publish"
-    id "groovy"
+    id("java")
 }
 
 import org.json.JSONObject
@@ -30,21 +28,13 @@ JSONObject projectInfo = new JSONObject((Map<String, Object>) yaml.load(
 
 repositories {
     mavenLocal()
-    maven {
-        url = uri(
-                "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
-        )
-    }
-    maven {
-        url = uri("https://oss.sonatype.org/content/groups/public/")
-    }
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    maven(url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven(url = "https://oss.sonatype.org/content/groups/public/")
+    maven(url = "https://repo.maven.apache.org/maven2/")
 }
 
 dependencies {
-    compileOnly "org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT"
+    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 }
 
 group = projectInfo.getString("group")
@@ -65,7 +55,7 @@ tasks.withType(JavaCompile) {
 // Scan all files
 new File("$projectDir/src/main/java").eachFileRecurse { file ->
     if (!file.isFile()) return
-    println ">>> " + file.getName()
+    println(">>> " + file.getName())
 
 }
 
